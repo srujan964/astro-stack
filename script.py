@@ -16,11 +16,11 @@ def colorize(image, hue, s=1,v=1):
     return color.hsv2rgb(hsv)
 
 
-#Normalize and resize to 1750 x 1750 resolution
+#Normalize and resize to 2000 x 2000 resolution
 def normalize(image):
     img = image * (255 / np.max(image))
     img = img.transpose()
-    img = resize(img, (1750, 1750), mode='constant')
+    img = resize(img, (2000, 2000), mode='constant')
     return img
 
 
@@ -30,11 +30,7 @@ def rescale_by_percentile(image,perclow=0.1,perchigh=99.9):
 
 
 def main():
-    if len(sys.argv) == 1:
-        sys.exit(
-            "Usage:python script.py low_wavelength.fits mid_wavelength.fits high_wavelength.fits"
-        )
-    elif len(sys.argv) == 4:
+    if len(sys.argv) == 4:
         file_1 = sys.argv[1]
         file_2 = sys.argv[2]
         file_3 = sys.argv[3]
@@ -67,7 +63,7 @@ def main():
 
     final_rgb = np.nanmean([low_RGB, mid_RGB, high_RGB], axis=0)
 
-    for i in [0,1,2]:
+    for i in range(3):
         final_rgb[:,:,i] = rescale_by_percentile(final_rgb[:,:,i])
     
     print('Saving image...')
